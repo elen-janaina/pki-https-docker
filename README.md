@@ -5,15 +5,19 @@ Montar uma infraestrutura de chaves públicas (AC Raiz, AC Intermediária, CRLs,
 
 ## Como executar (resumo)
 Pré-requisitos: Docker + Docker Compose, openssl
-
-1. Gerar ICP (se ainda não gerado):
+💡 Obs: Os arquivos sensíveis (.key, .crt, .p12, etc.) não são enviados ao repositório por segurança. Então:
+1. Gerar ICP:
    ```bash
    ./setup.sh
-2. Subir containers:
+2. De acesso:
+
+chmod 600 pki/server/server.key.pem
+
+4. Subir containers:
 
 docker compose up --build -d
  
-3. Testes rápidos:
+5. Testes rápidos:
 
 curl -v http://localhost:8080/raiz.crt 
 curl -v http://localhost:8080/intermediaria.crt 

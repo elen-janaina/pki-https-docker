@@ -65,3 +65,11 @@ echo "  3. Verifique os logs do cliente para confirmar sucesso"
 echo ""
 echo "Artefatos publicados em: $PKI_DIR/published/"
 echo "=========================================="
+echo "Gerando certificados do servidor..."
+
+mkdir -p pki/server
+openssl req -x509 -newkey rsa:2048 -nodes \
+  -keyout pki/server/server.key.pem \
+  -out pki/server/server-fullchain.crt.pem \
+  -subj "/C=BR/ST=RS/L=Caraa/O=DemoPKI/OU=Servidor/CN=localhost" \
+  -days 365
