@@ -1,0 +1,27 @@
+# Arquivos gerados pela PKI
+pki/raiz/private/
+pki/raiz/certs/
+pki/raiz/crl/
+pki/raiz/newcerts/
+pki/raiz/index.txt*
+pki/raiz/serial*
+pki/raiz/crlnumber*
+
+pki/intermediaria/private/
+pki/intermediaria/certs/
+pki/intermediaria/crl/
+pki/intermediaria/newcerts/
+pki/intermediaria/index.txt*
+pki/intermediaria/serial*
+pki/intermediaria/crlnumber*
+pki/intermediaria/*.csr.pem
+
+pki/server/
+pki/published/
+
+# Docker
+.env
+
+# OS
+.DS_Store
+Thumbs.db

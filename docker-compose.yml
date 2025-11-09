@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Servidor HTTP que publica certificados e CRLs (AIA/CDP)
+  pki-http:
+    build:
+      context: .
+      dockerfile: ./pki-http/Dockerfile
+    container_name: pki-http
+    hostname: pki.local
+    ports:
+      - "8080:80"
+    volumes:
+      - ./pki/published:/usr/share/nginx/html:ro
+    networks:
+      pki-network:
+        aliases:
+          - pki.local
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/raiz.crt"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+
+  # Servidor HTTPS com certificado TLS
+  web:
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
+    container_name: web
+    hostname: web.local
+    ports:
+      - "8443:443"
+    depends_on:
+      pki-http:
+        condition: service_healthy
+    networks:
+      pki-network:
+        aliases:
+          - web.local
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "--no-check-certificate", "https://localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  # Cliente que testa a conexão HTTPS
+  client:
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    container_name: client
+    depends_on:
+      web:
+        condition: service_healthy
+      pki-http:
+        condition: service_healthy
+    volumes:
+      - ./pki/published:/certs:ro
+    networks:
+      - pki-network
+
+networks:
+  pki-network:
+    driver: bridge

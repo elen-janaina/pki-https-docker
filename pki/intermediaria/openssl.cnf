@@ -1,0 +1,94 @@
+[ ca ]
+default_ca = CA_default
+
+####################################################################
+# Configuração da Autoridade Certificadora Intermediária
+####################################################################
+[ CA_default ]
+# Diretório base da CA Intermediária 
+dir = /home/elen/pki-project-fixed/pki/intermediaria
+certs             = $dir/certs
+crl_dir           = $dir/crl
+new_certs_dir     = $dir/newcerts
+database          = $dir/index.txt
+serial            = $dir/serial
+crlnumber         = $dir/crlnumber
+
+# Caminhos dos arquivos principais
+certificate       = $dir/certs/intermediaria.crt.pem
+private_key       = $dir/private/intermediaria.key.pem
+crl               = $dir/crl/intermediaria.crl.pem
+
+# Padrões de validade
+default_days      = 825
+default_crl_days  = 30
+default_md        = sha256
+
+# Opções de emissão
+preserve          = no
+policy            = policy_loose
+copy_extensions   = copy
+unique_subject    = no
+
+####################################################################
+# Políticas de emissão
+####################################################################
+[ policy_loose ]
+countryName             = optional
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+####################################################################
+# Extensões da Intermediária (quando ela mesma é emitida)
+####################################################################
+[ v3_intermediate_ca ]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical, CA:true, pathlen:0
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+crlDistributionPoints = URI:http://pki.local/crl/intermediaria.crl
+authorityInfoAccess = caIssuers;URI:http://pki.local/intermediaria.crt
+
+####################################################################
+# Extensão para certificados de servidor TLS
+####################################################################
+[ server_cert ]
+basicConstraints = CA:FALSE
+nsCertType = server
+nsComment = "Certificado de Servidor TLS"
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer:always
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+crlDistributionPoints = URI:http://pki.local/crl/intermediaria.crl
+authorityInfoAccess = caIssuers;URI:http://pki.local/intermediaria.crt
+subjectAltName = @alt_names
+
+####################################################################
+# Subject Alternative Names (SAN) para o servidor
+####################################################################
+[ alt_names ]
+DNS.1 = web.local
+DNS.2 = localhost
+
+####################################################################
+# Seção para geração de CSR
+####################################################################
+[ req ]
+default_bits        = 4096
+distinguished_name  = req_distinguished_name
+string_mask         = utf8only
+default_md          = sha256
+prompt              = no
+
+[ req_distinguished_name ]
+C  = BR
+ST = RS
+L  = Caraa
+O  = MeuProjeto
+OU = PKI
+CN = AC Intermediaria

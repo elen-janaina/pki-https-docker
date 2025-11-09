@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PKI Demo - Servidor HTTPS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        .status {
+            background: #10b981;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+        .info {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .info h2 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .info ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .info li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+            color: #6b7280;
+        }
+        .info li:last-child {
+            border-bottom: none;
+        }
+        .info li strong {
+            color: #374151;
+        }
+        .lock-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="lock-icon">🔒</div>
+        <h1>Conexão Segura Estabelecida!</h1>
+        <div class="status">HTTPS Funcionando</div>
+        
+        <p style="color: #6b7280; line-height: 1.6; margin-bottom: 20px;">
+            Este servidor está usando um certificado TLS válido emitido por uma 
+            Autoridade Certificadora Intermediária, que por sua vez foi assinada 
+            pela AC Raiz.
+        </p>
+
+        <div class="info">
+            <h2>Detalhes da PKI</h2>
+            <ul>
+                <li><strong>Servidor:</strong> web.local</li>
+                <li><strong>Certificado emitido por:</strong> AC Intermediária</li>
+                <li><strong>AC Intermediária assinada por:</strong> AC Raiz</li>
+                <li><strong>Validação:</strong> Via AIA (Authority Information Access)</li>
+                <li><strong>CRL:</strong> Disponível via CDP</li>
+            </ul>
+        </div>
+
+        <div class="info" style="margin-top: 15px;">
+            <h2>O que foi demonstrado</h2>
+            <ul>
+                <li>✓ Hierarquia de CAs (Raiz → Intermediária → Servidor)</li>
+                <li>✓ Busca automática de certificados via AIA</li>
+                <li>✓ Publicação de CRLs via HTTP</li>
+                <li>✓ Validação de cadeia de confiança TLS</li>
+                <li>✓ Subject Alternative Names (SAN)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
