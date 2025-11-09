@@ -12,7 +12,7 @@ Sistema operacional: Linux ou WSL2 (recomendado)
 Executar o projeto (um único comando!)
 docker compose up --build
 
-Pronto! O sistema irá:
+O sistema irá:
 
 Gerar automaticamente toda a infraestrutura PKI (AC Raiz, AC Intermediária, certificados)
 Subir o servidor HTTP que publica os certificados
@@ -31,4 +31,5 @@ curl -v http://localhost:8080/crl/intermediaria.crl
 curl -v --cacert pki/published/raiz.crt https://localhost:8443
 
 # Parar os containers
+
 docker compose down
