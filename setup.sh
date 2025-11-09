@@ -6,8 +6,14 @@ echo "  PKI Setup - Infraestrutura Completa"
 echo "=========================================="
 
 # Define diretório base
-PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
-PKI_DIR="$PROJECT_ROOT/pki"
+PROJECT_ROOT="/pki"
+PKI_DIR="$PROJECT_ROOT"
+
+# Verifica se já foi executado
+if [ -f "$PKI_DIR/published/raiz.crt" ] && [ -f "$PKI_DIR/server/server.key.pem" ]; then
+    echo "✅ PKI já foi gerada anteriormente. Pulando..."
+    exit 0
+fi
 
 # 1. Limpar artefatos anteriores
 echo ""
@@ -53,23 +59,13 @@ echo ""
 echo "🔐 Gerando Certificado TLS do Servidor..."
 bash "$PKI_DIR/scripts/gen_server.sh"
 
+# 6. Ajustar permissões finais
+chmod 600 "$PKI_DIR/server/server.key.pem"
+
 echo ""
 echo "=========================================="
 echo "✅ PKI gerada com sucesso!"
 echo "=========================================="
 echo ""
-echo "Próximos passos:"
-echo "  1. Execute: docker-compose up --build"
-echo "  2. Aguarde os containers iniciarem"
-echo "  3. Verifique os logs do cliente para confirmar sucesso"
-echo ""
 echo "Artefatos publicados em: $PKI_DIR/published/"
 echo "=========================================="
-echo "Gerando certificados do servidor..."
-
-mkdir -p pki/server
-openssl req -x509 -newkey rsa:2048 -nodes \
-  -keyout pki/server/server.key.pem \
-  -out pki/server/server-fullchain.crt.pem \
-  -subj "/C=BR/ST=RS/L=Caraa/O=DemoPKI/OU=Servidor/CN=localhost" \
-  -days 365
